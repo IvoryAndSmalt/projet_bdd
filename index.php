@@ -17,36 +17,43 @@
 
     <div style="height: 1px; width: 100%; background-color: black;"></div>
 
-    <?php
-        echo "<h2>Exercice 1</h2>";
+    <h1>Exercice 1</h1>
 
-        $reponse = $bdd->query('SELECT * FROM table1 WHERE last_name = "Palmer"');
-        while ($donnees = $reponse->fetch()) {
-            echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['country_code'].'</p>';
-        }
-    ?>
+    <button id="btnexo1">Afficher</button>
 
-    <div style="height: 1px; width: 100%; background-color: black;"></div>
-    <?php
-        echo "<h2>Exercice 2</h2>";
-
-        $reponse = $bdd->query('SELECT * FROM table1 WHERE gender = "female"');
-        while ($donnees = $reponse->fetch()) {
-            echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['country_code'].'</p>';
-        }
-    ?>
+    <div id="exo1">
+        <?php
+            $reponse = $bdd->query('SELECT * FROM table1 WHERE last_name = "Palmer"');
+            while ($donnees = $reponse->fetch()) {
+                echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['country_code'].'</p>';
+            }
+        ?>
+    </div>
 
     <div style="height: 1px; width: 100%; background-color: black;"></div>
 
-    <?php
-        echo "<h2>Exercice 3</h2>";
+    <h2>Exercice 2</h2>
+    <button id="btnexo2">Afficher</button>
+    <div id="exo2">
+        <?php
+            $reponse = $bdd->query('SELECT * FROM table1 WHERE gender = "female"');
+            while ($donnees = $reponse->fetch()) {
+                echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['country_code'].'</p>';
+            }
+        ?>
+    </div>
+    <div style="height: 1px; width: 100%; background-color: black;"></div>
 
+        <h2>Exercice 3</h2>
+        <button id="btnexo3">Afficher</button>
+        <div id="exo3">
+    <?php
         $reponse = $bdd->query('SELECT * FROM table1 WHERE country_code LIKE "N%"');
         while ($donnees = $reponse->fetch()) {
             echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['country_code'].'</p>';
         }
     ?>
-
+        </div>
     <div style="height: 1px; width: 100%; background-color: black;"></div>
 
     <?php
@@ -94,7 +101,7 @@
             <input id="formfn" type="text" placeholder="Frist Name" name="first">
             <input id="formln" type="text" placeholder="Last Name" name="last">
             <input id="formcc" type="text" placeholder="Country Code" name="countrycode">
-            <input id="formdob" type="date" placeholder="Date of Birth" name="dateofbirth">
+            <input id="formdob" type="date" name="dateofbirth">
             <input type="submit" value="Confirmer" name="send" id="envoyer"><label for="envoyer"></label>
         </form>
     </div>
@@ -105,10 +112,10 @@
         
         
         
-        if(!isset($POST['first']) || !isset($_POST['last']) || !isset($_POST['email']) || !isset($_POST['countrycode']) || !isset($_POST['dateofbirth'])){
+        if(!isset($_POST['first']) || !isset($_POST['last']) || !isset($_POST['email']) || !isset($_POST['countrycode']) || !isset($_POST['dateofbirth'])){
             echo "Veuillez remplir les tous les champs.";
         }
-        else {
+        else{
             echo "la requête a été envoyée";
             $reponse->execute(array($_POST['first'], $_POST['last'], $_POST['email'], $_POST['countrycode'], $_POST['dateofbirth']));
         }
@@ -140,7 +147,8 @@
     ?>
 
     <div style="height: 1px; width: 100%; background-color: black;"></div>
-    <h1>Exercice 7</h1>
+    <h1>Exercice 8</h1>
+
     <!-- 8) Afficher l'âge de chaque personne, puis la moyenne d’âge générale, celle des femmes puis celle des hommes. -->
     
     <?php
@@ -149,19 +157,30 @@
     $age = array();
 
     while ($donnees = $reponse->fetch()){
-        array_push($gender, $donnees['birth_date']);
-        echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'] . ', '. date_diff(date_create($donnees['birth_date']), date_format(date_create('today')))->y . '</p>';
+        array_push($age, $donnees['birth_date']);
+        $today = date_format(date_create('today'), "d/m/Y");
+        $datetoday = date_create_from_format("d/m/Y", $today);
+        $birth = date_create_from_format("d/m/Y", $donnees['birth_date']);
+        echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'] . ', '. date_diff($birth, $datetoday)->y . '</p>';
     }
 
-    
-
-        // echo "<h3>Il y a " . $im . " hommes et " . $if . " femmes dans l'entreprise.</h3>";
-       
-        // while ($donnees = $reponse->fetch()) {
-        //     echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['country_code'].'</p>';
-        // }
     ?>
     <div style="height: 1px; width: 100%; background-color: black;"></div>
+
+    <?php
+        echo "<h2>Exercice 9</h2>";
+
+        $reponse = $bdd->query('SELECT * FROM table1 WHERE email LIKE "%google%"');
+
+        while ($donnees = $reponse->fetch()) {
+            echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['country_code'].'</p>';
+        }
+    ?>
+
+    <div style="height: 1px; width: 100%; background-color: black;"></div>
+
+<script src="assets/js/script.js"></script>
+
 </body>
 
 </html>
