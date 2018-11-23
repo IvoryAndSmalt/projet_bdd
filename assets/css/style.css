@@ -2,3 +2,7 @@ body{
     background: grey;
     color: black;
 }
+
+blockquote{
+    font-style: italic;
+}

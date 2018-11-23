@@ -51,3 +51,21 @@ btnexo3.addEventListener('click', function(){
     }
     s3 = s3*-1;
 });
+
+var btnexo4 = document.getElementById('btnexo4');
+var exo4 = document.getElementById('exo4');
+var s4 = 1;
+
+exo4.style.display = "none";
+
+btnexo4.addEventListener('click', function(){
+    if(s4 == 1){
+        exo4.style.display = "block";
+        btnexo4.innerHTML = "Cacher";
+    }
+    else{
+        exo4.style.display = "none";
+        btnexo4.innerHTML = "Afficher";
+    }
+    s4 = s4*-1;
+});

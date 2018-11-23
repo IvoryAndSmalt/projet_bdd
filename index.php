@@ -17,11 +17,13 @@
 
     <div style="height: 1px; width: 100%; background-color: black;"></div>
 
-    <h1>Exercice 1</h1>
-
+    <h2>Exercice 1</h2>
     <button id="btnexo1">Afficher</button>
 
     <div id="exo1">
+        <blockquote>
+            1) Afficher tous les gens dont le nom est palmer.
+        </blockquote><br>
         <?php
             $reponse = $bdd->query('SELECT * FROM table1 WHERE last_name = "Palmer"');
             while ($donnees = $reponse->fetch()) {
@@ -35,6 +37,9 @@
     <h2>Exercice 2</h2>
     <button id="btnexo2">Afficher</button>
     <div id="exo2">
+        <blockquote>
+            2) Afficher toutes les femmes.
+        </blockquote><br>
         <?php
             $reponse = $bdd->query('SELECT * FROM table1 WHERE gender = "female"');
             while ($donnees = $reponse->fetch()) {
@@ -44,32 +49,43 @@
     </div>
     <div style="height: 1px; width: 100%; background-color: black;"></div>
 
-        <h2>Exercice 3</h2>
-        <button id="btnexo3">Afficher</button>
-        <div id="exo3">
-    <?php
-        $reponse = $bdd->query('SELECT * FROM table1 WHERE country_code LIKE "N%"');
-        while ($donnees = $reponse->fetch()) {
-            echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['country_code'].'</p>';
-        }
-    ?>
-        </div>
+    <h2>Exercice 3</h2>
+    <button id="btnexo3">Afficher</button>
+    <div id="exo3">
+        <blockquote>
+            3) Tous les états dont la lettre commence par N.
+        </blockquote><br>
+        <?php
+            $reponse = $bdd->query('SELECT DISTINCT * FROM table1 WHERE country_code LIKE "N%"');
+            while ($donnees = $reponse->fetch()) {
+                echo '<p>' .$donnees['country_code'].'</p>';
+            }
+        ?>
+    </div>
     <div style="height: 1px; width: 100%; background-color: black;"></div>
 
-    <?php
-        echo "<h2>Exercice 4</h2>";
-
+    <h2>Exercice 4</h2>
+    <button id="btnexo4">Afficher</button>
+    <div id="exo4">
+        <blockquote>
+            4) Tous les emails qui contiennent google.
+        </blockquote><br>
+        <?php
         $reponse = $bdd->query('SELECT * FROM table1 WHERE email LIKE "%google%"');
         while ($donnees = $reponse->fetch()) {
-            echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['country_code'].'</p>';
+            echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].'</p>';
         }
-    ?>
-
+        ?>
+    </div>
     <div style="height: 1px; width: 100%; background-color: black;"></div>
 
-    <?php
-        echo "<h2>Exercice 5</h2>";
-
+    <h2>Exercice 5</h2>
+    <button id="btnexo5">Afficher</button>
+    <div id="exo5">
+        <blockquote>
+            5) Répartition par Etat et le nombre d’enregistrement par état (croissant).
+        </blockquote><br>
+        <?php
         $reponse = $bdd->query('SELECT DISTINCT country_code FROM table1 ORDER BY country_code');
 
         $ccd = array();
@@ -85,13 +101,15 @@
                 $i=$i+1;
                 echo '<p>' . $popinner['last_name'].', '.$popinner['first_name'].', '.$popinner['email'].', '.$popinner['gender'].', '.$popinner['ip_address'].', '.$popinner['birth_date'].', '.$popinner['avatar_url'].'</p>';
             }
-            echo "<h3>Il y a " . $i . " habitants dans le pays " . $value . "</h3>";
+            if ($i>0){
+                echo "<h3>Il y a " . $i . " habitants dans le pays " . $value . "</h3>";
+            }
             $i=0;?>
             <div style="height: 1px; width: 80%; background-color: blue;"></div>
             <?php
         }
     ?>
-
+    </div>
     <div style="height: 1px; width: 100%; background-color: black;"></div>
     <!-- 6) Insérer un utilisateur, lui mettre à jour son adresse mail puis supprimer l’utilisateur. -->
     <h1>Exercice 6</h1>
@@ -167,9 +185,10 @@
     ?>
     <div style="height: 1px; width: 100%; background-color: black;"></div>
 
-    <?php
-        echo "<h2>Exercice 9</h2>";
+    <h2>Exercice 9</h2>
+    <!-- 9) Créer deux nouvelles tables, une qui contient l’ensemble des membres de l’ACS, l’autre qui contient les département avec numéros et nom écrit. Afficher le nom de chaque apprenant avec son département de résidence. -->
 
+    <?php
         $reponse = $bdd->query('SELECT * FROM table1 WHERE email LIKE "%google%"');
 
         while ($donnees = $reponse->fetch()) {
