@@ -9,11 +9,13 @@
 </head>
 <body>
 
+<!-- '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['avatar_url'].'</p>'; -->
+
     <?php
+        include('mdp.php');
+        $bdd = new PDO('mysql:host=https://promo-24.codeur.online;dbname=test', 'lucasv', $mdp);
 
-    // '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['avatar_url'].'</p>';
-
-    $bdd = new PDO('mysql:host=localhost;dbname=test', 'phpmyadmin', 'test');?>
+    ?>
 
     <div style="height: 1px; width: 100%; background-color: black;"></div>
 
@@ -43,7 +45,7 @@
         <?php
             $reponse = $bdd->query('SELECT * FROM table1 WHERE gender = "female"');
             while ($donnees = $reponse->fetch()) {
-                echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['country_code'].'</p>';
+                echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'] . '</p>';
             }
         ?>
     </div>
@@ -56,7 +58,7 @@
             3) Tous les états dont la lettre commence par N.
         </blockquote><br>
         <?php
-            $reponse = $bdd->query('SELECT DISTINCT * FROM table1 WHERE country_code LIKE "N%"');
+            $reponse = $bdd->query('SELECT DISTINCT country_code FROM table1 WHERE country_code LIKE "N%" ORDER BY country_code');
             while ($donnees = $reponse->fetch()) {
                 echo '<p>' .$donnees['country_code'].'</p>';
             }
@@ -83,36 +85,25 @@
     <button id="btnexo5">Afficher</button>
     <div id="exo5">
         <blockquote>
-            5) Répartition par Etat et le nombre d’enregistrement par état (croissant).
+            5) Répartition par Etat et le nombre d’enregistrement par état (décroissant).
         </blockquote><br>
         <?php
-        $reponse = $bdd->query('SELECT DISTINCT country_code FROM table1 ORDER BY country_code');
 
-        $ccd = array();
-
+        $reponse = $bdd->query("SELECT COUNT(*) AS nbr_doublon, country_code from table1 GROUP BY country_code HAVING COUNT(*) >= 1 ORDER BY nbr_doublon DESC");
         while ($donnees = $reponse->fetch()){
-            array_push($ccd, $donnees['country_code']);
+
+        echo '<p>Il y a ' . $donnees['nbr_doublon'] . ' habitants dans le pays ' . $donnees['country_code'] .'</p>';
         }
-        $i=0;
-        foreach ($ccd as $value) {
-            $getpop = $bdd->query("SELECT * FROM table1 WHERE country_code ='$value'");
-            
-            while ($popinner = $getpop->fetch()){
-                $i=$i+1;
-                echo '<p>' . $popinner['last_name'].', '.$popinner['first_name'].', '.$popinner['email'].', '.$popinner['gender'].', '.$popinner['ip_address'].', '.$popinner['birth_date'].', '.$popinner['avatar_url'].'</p>';
-            }
-            if ($i>0){
-                echo "<h3>Il y a " . $i . " habitants dans le pays " . $value . "</h3>";
-            }
-            $i=0;?>
+        ?>
             <div style="height: 1px; width: 80%; background-color: blue;"></div>
-            <?php
-        }
-    ?>
     </div>
     <div style="height: 1px; width: 100%; background-color: black;"></div>
-    <!-- 6) Insérer un utilisateur, lui mettre à jour son adresse mail puis supprimer l’utilisateur. -->
-    <h1>Exercice 6</h1>
+    <h2>Exercice 6</h2>
+    <button id="btnexo6">Afficher</button>
+    <div id="exo6">
+        <blockquote>
+            6) Insérer un utilisateur, lui mettre à jour son adresse mail puis supprimer l’utilisateur.
+        </blockquote><br>
     <div class="formcontainer">
         <form action="#backToUser" class="myform" id="backToUser" method="post">
             <input id="formemail" type="email" placeholder="email" name="email">
@@ -138,62 +129,86 @@
             $reponse->execute(array($_POST['first'], $_POST['last'], $_POST['email'], $_POST['countrycode'], $_POST['dateofbirth']));
         }
     ?>
+    </div>
 
     <div style="height: 1px; width: 100%; background-color: black;"></div>
-    <h1>Exercice 7</h1>
+    <h2>Exercice 7</h2>
     <!-- 7) Nombre de femme et d’homme. -->
     <?php
-    $reponse = $bdd->query('SELECT gender FROM table1 WHERE 1');
-
-    $gender = array();
+    $reponse = $bdd->query('SELECT gender, COUNT(*) AS nombre FROM table1 GROUP BY gender');
 
     while ($donnees = $reponse->fetch()){
-        array_push($gender, $donnees['gender']);
+        echo "<p> Il y a ". $donnees['nombre'] . " " . $donnees['gender'] . " dans l'entreprise.";
     }
-    $im=0;
-    $if=0;
-    foreach ($gender as $value) {
-        if($value === "Male"){
-            $im=$im+1;
-        }
-        else if($value === "Female"){
-            $if=$if+1;
-        }     
-    }
-        echo "<h3>Il y a " . $im . " hommes et " . $if . " femmes dans l'entreprise.</h3>";
        
     ?>
 
     <div style="height: 1px; width: 100%; background-color: black;"></div>
-    <h1>Exercice 8</h1>
 
-    <!-- 8) Afficher l'âge de chaque personne, puis la moyenne d’âge générale, celle des femmes puis celle des hommes. -->
-    
+
+    <h2>Exercice 8</h2>
+    <button id="btnexo8">Afficher</button>
+    <div id="exo8">
+        <blockquote>
+            8) Afficher l'âge de chaque personne, puis la moyenne d’âge générale, celle des femmes puis celle des hommes.
+        </blockquote><br>
     <?php
-    $reponse = $bdd->query('SELECT first_name, last_name, birth_date FROM table1 WHERE 1');
+    // $reponse = $bdd->query('SELECT first_name, last_name, birth_date, gender FROM table1 WHERE 1');
 
-    $age = array();
+    // $age = array();
 
-    while ($donnees = $reponse->fetch()){
-        array_push($age, $donnees['birth_date']);
-        $today = date_format(date_create('today'), "d/m/Y");
-        $datetoday = date_create_from_format("d/m/Y", $today);
-        $birth = date_create_from_format("d/m/Y", $donnees['birth_date']);
-        echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'] . ', '. date_diff($birth, $datetoday)->y . '</p>';
-    }
+    // while ($donnees = $reponse->fetch()){
+    //     array_push($age, $donnees['birth_date']);
+    //     $today = date_format(date_create('today'), "d/m/Y");
+    //     $datetoday = date_create_from_format("d/m/Y", $today);
+    //     $birth = date_create_from_format("d/m/Y", $donnees['birth_date']);
+    //     echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'] . ', '. date_diff($birth, $datetoday)->y . '</p>';
+
+        // }
+        $reponse = $bdd->query("SELECT ROUND(AVG(TIMESTAMPDIFF(year, STR_TO_DATE(birth_date, '%d/%m/%Y'), NOW())), 1) AS average FROM table1");
+        while ($donnees = $reponse->fetch()){
+        echo "<p> La moyenne d'âge des employés est de " . $donnees['average'] . " ans.</p>";
+        }
+
+        $reponse = $bdd->query("SELECT gender, ROUND(AVG(TIMESTAMPDIFF(year, STR_TO_DATE(birth_date, '%d/%m/%Y'), NOW())), 1) AS average FROM table1 GROUP BY gender");
+        while ($donnees = $reponse->fetch()){
+        echo "<p> La moyenne d'âge des " . $donnees['gender'] ." est de " . $donnees['average'] . " ans.</p>";
+        }
+
+        $reponse = $bdd->query('SELECT last_name, first_name, TIMESTAMPDIFF(year, STR_TO_DATE(birth_date, "%d/%m/%Y"), NOW()) AS age FROM table1');
+        while ($donnees = $reponse->fetch()){
+            echo '<p>' . $donnees['first_name'] . ', ' . $donnees['age'] . '</p>';
+        }
 
     ?>
+    </div>
     <div style="height: 1px; width: 100%; background-color: black;"></div>
 
     <h2>Exercice 9</h2>
-    <!-- 9) Créer deux nouvelles tables, une qui contient l’ensemble des membres de l’ACS, l’autre qui contient les département avec numéros et nom écrit. Afficher le nom de chaque apprenant avec son département de résidence. -->
-
+    <button id="btnexo9">Afficher</button>
+    <div id="exo9">
+        <blockquote>
+            9) Créer deux nouvelles tables, une qui contient l’ensemble des membres de l’ACS, l’autre qui contient les département avec numéros et nom écrit. Afficher le nom de chaque apprenant avec son département de résidence.
+        </blockquote><br>
     <?php
-        $reponse = $bdd->query('SELECT * FROM table1 WHERE email LIKE "%google%"');
 
-        while ($donnees = $reponse->fetch()) {
-            echo '<p>' . $donnees['last_name'].', '.$donnees['first_name'].', '.$donnees['email'].', '.$donnees['gender'].', '.$donnees['ip_address'].', '.$donnees['birth_date'].', '.$donnees['avatar_url'].', '.$donnees['country_code'].'</p>';
-        }
+        $drop = $bdd->prepare("DROP TABLE Departements, Persons");
+        $drop->execute();
+
+        $createPersons = $bdd->prepare('CREATE TABLE Persons(
+            PersonID int,
+            nom varchar(255),
+            prenom varchar(255))'); 
+        // A terme un input à la place de Persons
+        $createPersons->execute();
+
+        $createPersons = $bdd->prepare('CREATE TABLE Departements(
+            PersonID int,
+            nom varchar(255),
+            prenom varchar(255))'); 
+        // A terme un input à la place de Persons
+        $createPersons->execute();
+
     ?>
 
     <div style="height: 1px; width: 100%; background-color: black;"></div>
